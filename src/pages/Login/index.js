@@ -13,5 +13,25 @@ export default function Login({ history }) {
     // localStorage.setItem("user", _id);
     // history.push("/dashboard");
   }
-  return <>TEEEESTE</>;
+  return (
+    <>
+      <p>
+        Ofereça <strong>Spots</strong> para programadores e encontre{" "}
+        <strong>talentos</strong>
+      </p>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="email">E-mail *</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Seu melhor email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+        <button className="btn" onClick={() => history.push("/dashboard")}>
+          Entrar{" "}
+        </button>
+      </form>
+    </>
+  );
 }

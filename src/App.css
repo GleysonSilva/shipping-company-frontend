@@ -10,11 +10,9 @@ html,
 body,
 #root {
   min-height: 100%;
-  background-color: "#fafafa";
 }
-
 body {
-  /* background: #000 url("./assets/545819.jpg") no-repeat; */
+  background: #000 url("./assets/545819.jpg") no-repeat;
   background-size: cover;
   -webkit-font-smoothing: antialiased !important;
 }
@@ -31,7 +29,6 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: "#fafafa";
 }
 .content {
   width: 100%;
@@ -78,4 +75,5 @@ button {
 
 .content button.btn:hover {
   background: #e14f50;
+
 }
