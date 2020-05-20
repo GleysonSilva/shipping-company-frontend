@@ -66,3 +66,5 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+"# shipping-company-frontend"  git init git add README.md git commit -m "first commit" git remote add origin git@github.com:GleysonSilva/shipping-company-frontend.git git push -u origin master 
+"# shipping-company-frontend" 
