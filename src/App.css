@@ -12,7 +12,7 @@ body,
   min-height: 100%;
 }
 body {
-  background: #000 url("./assets/545819.jpg") no-repeat;
+  background: #000 url("./assets/545819.png") no-repeat;
   background-size: cover;
   -webkit-font-smoothing: antialiased !important;
 }

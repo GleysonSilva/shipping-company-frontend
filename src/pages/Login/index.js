@@ -1,5 +1,7 @@
 import React from "react";
 import api from "../../services/api";
+import Paper from "@material-ui/core/Paper";
+import "./style.css";
 
 export default function Login({ history }) {
   const [email, setEmail] = React.useState("");
@@ -14,13 +16,9 @@ export default function Login({ history }) {
     // history.push("/dashboard");
   }
   return (
-    <>
-      <p>
-        Ofereça <strong>Spots</strong> para programadores e encontre{" "}
-        <strong>talentos</strong>
-      </p>
+    <div className="root">
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">E-mail *</label>
+        <label htmlFor="email">Login</label>
         <input
           type="email"
           id="email"
@@ -32,6 +30,6 @@ export default function Login({ history }) {
           Entrar{" "}
         </button>
       </form>
-    </>
+    </div>
   );
 }
