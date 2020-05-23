@@ -2,34 +2,72 @@ import React from "react";
 import api from "../../services/api";
 import Paper from "@material-ui/core/Paper";
 import "./style.css";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    "& > *": {
+      margin: theme.spacing(1),
+      width: theme.spacing("auto"),
+      height: theme.spacing(20),
+    },
+  },
+}));
 
 export default function Login({ history }) {
   const [email, setEmail] = React.useState("");
+  const classes = useStyles();
 
   async function handleSubmit(event) {
+    history.push("/dashboard");
     // event.preventDefault();
     const response = await api.post("/login", { email });
     console.log(response);
 
     // const { _id } = response.data;
     // localStorage.setItem("user", _id);
-    // history.push("/dashboard");
   }
   return (
-    <div className="root">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Login</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="Seu melhor email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <button className="btn" onClick={() => history.push("/dashboard")}>
-          Entrar{" "}
-        </button>
-      </form>
+    <div className={`col-12 img ${classes.root}`}>
+      <Paper elevation={3} className="p-5">
+        <div className="col-12">
+          <div>
+            <TextField id="standard-basic" label="Login" />
+          </div>
+          <div className="d-flex justify-content-center p-4">
+            <Button
+              variant="outlined"
+              size="small"
+              color="primary"
+              className={classes.margin}
+              onClick={handleSubmit}
+            >
+              Entrar
+            </Button>
+          </div>
+        </div>
+      </Paper>
     </div>
   );
+}
+
+{
+  /* <form onSubmit={handleSubmit}>
+    <label htmlFor="email">Login</label>
+    <input
+      type="email"
+      id="email"
+      placeholder="Seu melhor email"
+      value={email}
+      onChange={(event) => setEmail(event.target.value)}
+    />
+    <button className="btn" onClick={() => history.push("/dashboard")}>
+      Entrar{" "}
+    </button>
+  </form> */
 }
