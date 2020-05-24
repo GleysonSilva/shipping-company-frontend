@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    flexWrap: "wrap",
+    // flexWrap: "wrap",
     justifyContent: "center",
     "& > *": {
       margin: theme.spacing(1),
@@ -34,7 +34,8 @@ export default function Login({ history }) {
   }
   return (
     <div className={`col-12 img ${classes.root}`}>
-      <Paper elevation={3} className="p-5">
+      {/* <div className="col-12 justify-content-center login-modal"> */}
+      <Paper elevation={3} className="mt-5">
         <div className="col-12">
           <div>
             <TextField id="standard-basic" label="Login" />
@@ -52,6 +53,7 @@ export default function Login({ history }) {
           </div>
         </div>
       </Paper>
+      {/* </div> */}
     </div>
   );
 }

@@ -17,10 +17,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         <Component {...props} />
       ) : (
         <header className="img-style">
-          <img style={{ width: "40%" }} src={logo} alt="AirBnb" />
-          {/* <div className="content"> */}
           <Redirect to={{ pathname: "/", state: { form: props.location } }} />
-          {/* </div> */}
         </header>
       )
     }

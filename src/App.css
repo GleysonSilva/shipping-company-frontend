@@ -16,8 +16,7 @@ body {
   /* background-size: cover; */
   /* -webkit-font-smoothing: antialiased !important; */
 }
-header{
-  height: 100vh;
+header {
 }
 body,
 input,
@@ -37,6 +36,9 @@ button {
   width: 100%;
   height: 900vh;
   color: white;
+}
+.img-style {
+  height: 100vh;
 }
 /* .content {
   width: 100%;
