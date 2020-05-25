@@ -34,26 +34,28 @@ export default function Login({ history }) {
   }
   return (
     <div className={`col-12 img ${classes.root}`}>
-      {/* <div className="col-12 justify-content-center login-modal"> */}
-      <Paper elevation={3} className="mt-5">
-        <div className="col-12">
-          <div>
-            <TextField id="standard-basic" label="Login" />
+      <div className="col-3 justify-content-center login-modal">
+        <Paper elevation={3} className="mt-5">
+          <div className="col-12 p-5 ">
+            <div>
+              <TextField id="standard-basic" label="Login" fullWidth />
+            </div>
+            <div className="d-flex justify-content-center p-4">
+              <Button
+                variant="outlined"
+                size="small"
+                className={classes.margin}
+                onClick={handleSubmit}
+                style={{
+                  color: "#5c145c",
+                }}
+              >
+                Entrar
+              </Button>
+            </div>
           </div>
-          <div className="d-flex justify-content-center p-4">
-            <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              className={classes.margin}
-              onClick={handleSubmit}
-            >
-              Entrar
-            </Button>
-          </div>
-        </div>
-      </Paper>
-      {/* </div> */}
+        </Paper>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,15 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-
+import ViaCep from "react-via-cep";
+import TextField from "@material-ui/core/TextField";
+import Icon from "@material-ui/core/Icon";
+import SaveIcon from "@material-ui/icons/Save";
+import Button from "@material-ui/core/Button";
+import SearchIcon from "@material-ui/icons/Search";
+import Paper from "@material-ui/core/Paper";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -41,18 +49,28 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     color: "#000",
   },
+  button: {
+    margin: theme.spacing(1),
+  },
+  textTitulo: {
+    fontWeight: "800",
+  },
 }));
 
 export default function PermanentDrawerLeft() {
   const classes = useStyles();
-
+  const [state, setstate] = React.useState({ cepDest: "", cepOrig: "" });
+  const [view, setview] = React.useState(0);
+  const handleSetIndex = (params) => {
+    console.log("p", params);
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            Permanent drawer
+            {view === 0 ? "Gerar Novo Pedido" : "Lista de Pedidos Gerado"}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -67,8 +85,8 @@ export default function PermanentDrawerLeft() {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
+          {["Gerar Pedidos", "Lista de Pedidos"].map((text, index) => (
+            <ListItem button key={text} onClick={() => setview(index)}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -76,50 +94,224 @@ export default function PermanentDrawerLeft() {
             </ListItem>
           ))}
         </List>
-
-        {/*  <Divider /><List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <span style={{ color: "red" }}>tttt</span>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        {view == 0 ? (
+          <>
+            <div className={classes.toolbar} />
+            <Paper elevation={3} className="p-3 m-0">
+              <Typography
+                variant="h6"
+                gutterBottom
+                className={classes.textTitulo}
+              >
+                Origem <ArrowForwardIcon />
+              </Typography>
+              <ViaCep cep={state.cepOrig} lazy>
+                {({ data, loading, error, fetch }) => {
+                  console.log("data", data);
+                  if (loading) {
+                    return <p>loading...</p>;
+                  }
+                  if (data) {
+                    return (
+                      <div className="col-12 d-flex">
+                        <div className="col-2">
+                          <TextField
+                            id="standard-basic"
+                            label="localidade"
+                            value={data.localidade}
+                          />
+                        </div>
+                        <div className="col-2">
+                          {" "}
+                          <TextField
+                            id="standard-basic"
+                            label="logradouro"
+                            value={data.logradouro}
+                          />
+                        </div>
+                        <div className="col-2">
+                          {" "}
+                          <TextField
+                            id="standard-basic"
+                            label="numero"
+                            // value={data.logradouro}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <TextField
+                            id="standard-basic"
+                            label="uf"
+                            value={data.uf}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <TextField
+                            fullWidth
+                            id="standard-basic"
+                            label="ibge"
+                            value={data.ibge}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <TextField
+                            fullWidth
+                            id="standard-basic"
+                            label="pais"
+                            value={"brasil"}
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="col-12 d-flex">
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          label="Cep"
+                          value={state.cepOrig}
+                          onChange={(e) =>
+                            setstate({
+                              ...state,
+                              cepOrig: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          className={classes.button}
+                          startIcon={<SearchIcon />}
+                          onClick={fetch}
+                        >
+                          Pesquisar
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }}
+              </ViaCep>
+            </Paper>
+            <Paper elevation={3} className="p-3 mt-2 m-0">
+              <Typography
+                variant="h6"
+                gutterBottom
+                className={classes.textTitulo}
+              >
+                Destino
+                <ArrowBackIcon />
+              </Typography>
+              <ViaCep cep={state.cepDest} lazy>
+                {({ data, loading, error, fetch }) => {
+                  console.log("data", data);
+                  if (loading) {
+                    return <p>loading...</p>;
+                  }
+                  if (data) {
+                    return (
+                      <div className="col-12 d-flex">
+                        <div className="col-2">
+                          <TextField
+                            id="standard-basic"
+                            label="localidade"
+                            value={data.localidade}
+                          />
+                        </div>
+                        <div className="col-2">
+                          {" "}
+                          <TextField
+                            id="standard-basic"
+                            label="logradouro"
+                            value={data.logradouro}
+                          />
+                        </div>
+                        <div className="col-2">
+                          {" "}
+                          <TextField
+                            id="standard-basic"
+                            label="numero"
+                            // value={data.logradouro}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <TextField
+                            id="standard-basic"
+                            label="uf"
+                            value={data.uf}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <TextField
+                            fullWidth
+                            id="standard-basic"
+                            label="ibge"
+                            value={data.ibge}
+                          />
+                        </div>
+                        <div className="col-2">
+                          <TextField
+                            fullWidth
+                            id="standard-basic"
+                            label="pais"
+                            value={"brasil"}
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="col-12 d-flex">
+                      <div>
+                        <TextField
+                          id="standard-basic"
+                          label="Cep"
+                          value={state.cepDest}
+                          onChange={(e) =>
+                            setstate({
+                              ...state,
+                              cepDest: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          className={classes.button}
+                          startIcon={<SearchIcon />}
+                          onClick={fetch}
+                        >
+                          Pesquisar
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                }}
+              </ViaCep>
+            </Paper>
+            <div className="col-12 d-flex justify-content-end">
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                className={classes.button}
+                startIcon={<SaveIcon />}
+              >
+                Salvar
+              </Button>
+            </div>
+          </>
+        ) : (
+          ""
+        )}
       </main>
     </div>
   );
