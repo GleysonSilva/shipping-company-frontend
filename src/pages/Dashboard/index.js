@@ -21,6 +21,11 @@ import SearchIcon from "@material-ui/icons/Search";
 import Paper from "@material-ui/core/Paper";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import Tables from "./table";
+import ReactFileReader from "react-file-reader";
+import { OutTable, ExcelRenderer } from "react-excel-renderer";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -59,11 +64,61 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PermanentDrawerLeft() {
   const classes = useStyles();
-  const [state, setstate] = React.useState({ cepDest: "", cepOrig: "" });
   const [view, setview] = React.useState(0);
-  const handleSetIndex = (params) => {
-    console.log("p", params);
+  const [state, setstate] = React.useState({
+    cepDest: "",
+    cepOrig: "",
+    excel: "",
+  });
+  const [excel, setexcel] = React.useState({ cols: "", rows: "" });
+  let a = {
+    origin: {
+      locality: "",
+      street: "",
+      number: "",
+      uf: "",
+      cep: "",
+    },
+    destiny: "",
+    merchandise: [
+      {
+        name: "",
+        dimensions: "",
+        Weight: "",
+        value: "",
+      },
+      {
+        name: "",
+        dimensions: "",
+        Weight: "",
+        value: "",
+      },
+    ],
   };
+
+  const handleFiles = (files) => {
+    console.log(files);
+    fileHandler(files);
+  };
+
+  const fileHandler = (files) => {
+    let fileObj = files[0];
+    console.log("fileObj", fileObj);
+
+    //just pass the fileObj as parameter
+    ExcelRenderer(fileObj, (err, resp) => {
+      if (err) {
+        console.log(err);
+      } else {
+        setexcel({
+          cols: resp.cols,
+          rows: resp.rows,
+        });
+      }
+    });
+  };
+  console.log(excel);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -97,7 +152,7 @@ export default function PermanentDrawerLeft() {
       </Drawer>
       <span style={{ color: "red" }}>tttt</span>
       <main className={classes.content}>
-        {view == 0 ? (
+        {view === 0 ? (
           <>
             <div className={classes.toolbar} />
             <Paper elevation={3} className="p-3 m-0">
@@ -189,6 +244,9 @@ export default function PermanentDrawerLeft() {
                           className={classes.button}
                           startIcon={<SearchIcon />}
                           onClick={fetch}
+                          style={{
+                            background: "#5c145c",
+                          }}
                         >
                           Pesquisar
                         </Button>
@@ -288,6 +346,9 @@ export default function PermanentDrawerLeft() {
                           className={classes.button}
                           startIcon={<SearchIcon />}
                           onClick={fetch}
+                          style={{
+                            background: "#5c145c",
+                          }}
                         >
                           Pesquisar
                         </Button>
@@ -297,6 +358,8 @@ export default function PermanentDrawerLeft() {
                 }}
               </ViaCep>
             </Paper>
+            <div className="col-12 m-0 mt-2 p-0">{/* <Tables /> */}</div>
+
             <div className="col-12 d-flex justify-content-end">
               <Button
                 variant="contained"
@@ -304,6 +367,9 @@ export default function PermanentDrawerLeft() {
                 size="small"
                 className={classes.button}
                 startIcon={<SaveIcon />}
+                style={{
+                  background: "#5c145c",
+                }}
               >
                 Salvar
               </Button>
@@ -311,6 +377,39 @@ export default function PermanentDrawerLeft() {
           </>
         ) : (
           ""
+        )}
+        {view === 1 && (
+          <>
+            <div className={classes.toolbar} />
+
+            <div className={"col-12 d-flex justify-content-center p-5"}>
+              <ReactFileReader handleFiles={handleFiles} fileTypes={".xlsx"}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className={classes.button}
+                  startIcon={<CloudUploadIcon />}
+                  style={{
+                    background: "#5c145c",
+                  }}
+                >
+                  Carregar Arquivo
+                </Button>
+                {/* <button className="btn">Upload</button> */}
+              </ReactFileReader>
+            </div>
+            <dic className="col-12 d-flex justify-content-center mt-2">
+              {excel.rows && (
+                <OutTable
+                  data={excel.rows}
+                  columns={excel.cols}
+                  tableClassName="ExcelTable2007"
+                  tableHeaderRowClass="heading"
+                />
+              )}
+            </dic>
+          </>
         )}
       </main>
     </div>
