@@ -71,30 +71,43 @@ export default function PermanentDrawerLeft() {
     excel: "",
   });
   const [excel, setexcel] = React.useState({ cols: "", rows: "" });
-  let a = {
-    origin: {
-      locality: "",
-      street: "",
-      number: "",
-      uf: "",
-      cep: "",
+  const [arrayPackage, setarrayPackage] = React.useState([]);
+  const [json, setjson] = React.useState([
+    {
+      user: 0,
+      origin: {
+        street: "",
+        number: 0,
+        complement: "",
+        neighborhood: "",
+        locality: "",
+        uf: "",
+        zip_code: "",
+      },
+      destiny: {
+        street: "",
+        number: 0,
+        complement: "",
+        neighborhood: "",
+        locality: "",
+        uf: "",
+        zip_code: "",
+      },
+      order_pickup_date: "",
+      delivery_date: "",
+      package: [
+        {
+          products: [0],
+          height: 0.0,
+          width: 0.0,
+          length: 0.0,
+          weight: 0.0,
+          quantity_of_packages: 0,
+          value: 0.0,
+        },
+      ],
     },
-    destiny: "",
-    merchandise: [
-      {
-        name: "",
-        dimensions: "",
-        Weight: "",
-        value: "",
-      },
-      {
-        name: "",
-        dimensions: "",
-        Weight: "",
-        value: "",
-      },
-    ],
-  };
+  ]);
 
   const handleFiles = (files) => {
     console.log(files);
@@ -103,13 +116,13 @@ export default function PermanentDrawerLeft() {
 
   const fileHandler = (files) => {
     let fileObj = files[0];
-    console.log("fileObj", fileObj);
 
     //just pass the fileObj as parameter
     ExcelRenderer(fileObj, (err, resp) => {
       if (err) {
         console.log(err);
       } else {
+        handleFormJson(resp.rows);
         setexcel({
           cols: resp.cols,
           rows: resp.rows,
@@ -117,7 +130,55 @@ export default function PermanentDrawerLeft() {
       }
     });
   };
-  console.log(excel);
+  const handleFormJson = (params) => {
+    console.log("p", params);
+    let origin = {
+      complement: params[2][3],
+      locality: params[2][5],
+      neighborhood: params[2][4],
+      number: params[2][1],
+      street: params[2][0],
+      uf: params[2][6],
+      zip_code: params[2][7],
+    };
+    let destiny = {
+      complement: params[6][3],
+      locality: params[6][5],
+      neighborhood: params[6][4],
+      number: params[6][1],
+      street: params[6][0],
+      uf: params[6][6],
+      zip_code: params[6][7],
+    };
+
+    let order_pickup_date = params[9][0];
+    let delivery_date = params[12][0];
+
+    var array = [];
+    params.forEach((element, index) => {
+      if (index >= 16 && params.length - 1) {
+        array.push({
+          products: element[0],
+          height: element[1],
+          width: element[2],
+          length: element[3],
+          weight: element[4],
+          quantity_of_packages: element[5],
+          value: element[6],
+        });
+      }
+    });
+
+    console.log([
+      {
+        origin,
+        destiny,
+        delivery_date,
+        order_pickup_date,
+        arrayPackage: array,
+      },
+    ]);
+  };
 
   return (
     <div className={classes.root}>
@@ -404,7 +465,7 @@ export default function PermanentDrawerLeft() {
                 <OutTable
                   data={excel.rows}
                   columns={excel.cols}
-                  tableClassName="ExcelTable2007"
+                  tableClassName="ExcelTable2010"
                   tableHeaderRowClass="heading"
                 />
               )}
