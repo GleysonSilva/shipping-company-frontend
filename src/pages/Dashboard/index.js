@@ -25,6 +25,9 @@ import Tables from "./table";
 import ReactFileReader from "react-file-reader";
 import { OutTable, ExcelRenderer } from "react-excel-renderer";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import { GootaGO } from "./goota_go_fast.xlsx";
+import { Logo } from "./logo.png";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -186,7 +189,7 @@ export default function PermanentDrawerLeft() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            {view === 0 ? "Gerar Novo Pedido" : "Lista de Pedidos Gerado"}
+            {view === 0 ? "Gerar Novo Pedido" : "Integração"}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -201,7 +204,7 @@ export default function PermanentDrawerLeft() {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {["Gerar Pedidos", "Lista de Pedidos"].map((text, index) => (
+          {["Gerar Pedidos", "Integração"].map((text, index) => (
             <ListItem button key={text} onClick={() => setview(index)}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -226,7 +229,6 @@ export default function PermanentDrawerLeft() {
               </Typography>
               <ViaCep cep={state.cepOrig} lazy>
                 {({ data, loading, error, fetch }) => {
-                  console.log("data", data);
                   if (loading) {
                     return <p>loading...</p>;
                   }
@@ -460,7 +462,7 @@ export default function PermanentDrawerLeft() {
                 {/* <button className="btn">Upload</button> */}
               </ReactFileReader>
             </div>
-            <dic className="col-12 d-flex justify-content-center mt-2">
+            <div className="col-12 d-flex justify-content-center mt-2">
               {excel.rows && (
                 <OutTable
                   data={excel.rows}
@@ -469,7 +471,31 @@ export default function PermanentDrawerLeft() {
                   tableHeaderRowClass="heading"
                 />
               )}
-            </dic>
+              <div>
+                <a href={GootaGO} download>
+                  Download Planilhar Pra Integração
+                </a>
+                <a href={Logo}>Download</a>
+                <Link to="./logo.png" target="_blank" download>
+                  Download
+                </Link>
+                <Link to={Logo} target="_blank" download>
+                  Download
+                </Link>
+
+                <a
+                  href="./logo.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                >
+                  <Button>
+                    <i className="fas fa-download" />
+                    Download File
+                  </Button>
+                </a>
+              </div>
+            </div>
           </>
         )}
       </main>
