@@ -2,9 +2,12 @@ import React from "react";
 import api from "../../services/api";
 import Paper from "@material-ui/core/Paper";
 import "./style.css";
+import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import BarChartIcon from "@material-ui/icons/BarChart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +20,13 @@ const useStyles = makeStyles((theme) => ({
       height: theme.spacing(20),
     },
   },
+  textLogin: {
+    fontWeight: "700",
+    fontSize: "xx-large",
+    alignItems: "baseline",
+    color: "#bdbdbd",
+  },
+  rot: { webkitTransform: "rotate(-90deg)" },
 }));
 
 export default function Login({ history }) {
@@ -38,6 +48,24 @@ export default function Login({ history }) {
         <Paper elevation={3} className="mt-5">
           <div className="col-12 p-5 ">
             <div>
+              <div
+                className={`col-12 d-flex justify-content-center ${classes.textLogin}`}
+              >
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  className={classes.textLogin}
+                >
+                  GOOTA GO FAST
+                </Typography>
+                <div className="d-flex align-items-center">
+                  <BarChartIcon
+                    className="ml-2"
+                    style={{ webkitTransform: "rotate(-90deg)" }}
+                  />
+                  <LocalShippingIcon fontSize="large" />
+                </div>
+              </div>
               <TextField id="standard-basic" label="Login" fullWidth />
             </div>
             <div className="d-flex justify-content-center p-4">

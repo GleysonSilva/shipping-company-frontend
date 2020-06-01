@@ -28,6 +28,9 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { GootaGO } from "./goota_go_fast.xlsx";
 import { Logo } from "./logo.png";
 import { Link } from "react-router-dom";
+import firebaseDb from "../../firebase";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 
 const drawerWidth = 240;
 
@@ -62,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
   },
   textTitulo: {
     fontWeight: "800",
+  },
+  textLogin: {
+    fontWeight: "700",
+    alignItems: "end",
+    color: "#bdbdbd",
+    fontSize: "18px",
   },
 }));
 
@@ -153,9 +162,19 @@ export default function PermanentDrawerLeft() {
       uf: params[6][6],
       zip_code: params[6][7],
     };
-
-    let order_pickup_date = params[9][0];
-    let delivery_date = params[12][0];
+    console.log(
+      "params",
+      `${String(params[9][0]).substr(0, 2)}/${String(params[9][0]).substr(
+        -6,
+        2
+      )}/${String(params[9][0]).substr(-4)}`
+    );
+    let order_pickup_date = `${String(params[9][0]).substr(0, 2)}/${String(
+      params[9][0]
+    ).substr(-6, 2)}/${String(params[9][0]).substr(-4)}`;
+    let delivery_date = `${String(params[12][0]).substr(0, 2)}/${String(
+      params[12][0]
+    ).substr(-6, 2)}/${String(params[12][0]).substr(-4)}`;
 
     var array = [];
     params.forEach((element, index) => {
@@ -183,6 +202,45 @@ export default function PermanentDrawerLeft() {
     ]);
   };
 
+  const addOrEdit = () => {
+    let formData = {
+      fullname: "Gleyson Silva",
+      emnail: "gleeysonEmilio@",
+    };
+    console.log(firebaseDb.child("contacts"));
+
+    firebaseDb.child("contacts").push(formData, (err) => {
+      if (err) {
+        console.log("err", err);
+      }
+    });
+  };
+  React.useEffect(() => {
+    firebaseDb.child("contacts").on("value", (snapshot) => {
+      if (snapshot.val() != null) {
+        console.log("snap", snapshot.val());
+      }
+    });
+  }, []);
+
+  const handleaddOrEdit = () => {
+    // firebaseDb.child("contacts/-M8fcv96Acux0AczReDo").get(console.log());
+    firebaseDb
+      .collection("contacts")
+      .where("emnail", "==", "gleeysonEmilioo")
+      .get()
+      .then(function (querySnapshot) {
+        console.log("-->", querySnapshot);
+        querySnapshot.forEach(function (doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -201,7 +259,23 @@ export default function PermanentDrawerLeft() {
         }}
         anchor="left"
       >
-        <div className={classes.toolbar} />
+        <div className={`d-flex align-items-center ${classes.toolbar}`}>
+          <div
+            className={`col-12 d-flex justify-content-center ${classes.textLogin}`}
+          >
+            <Typography variant="h6" gutterBottom className={classes.textLogin}>
+              GOOTA GO FAST
+            </Typography>
+            <div className="d-flex align-items-center">
+              <BarChartIcon
+                className="ml-2"
+                style={{ webkitTransform: "rotate(-90deg)" }}
+                fontSize="medium"
+              />
+              <LocalShippingIcon fontSize="medium" />
+            </div>
+          </div>
+        </div>
         <Divider />
         <List>
           {["Gerar Pedidos", "Integração"].map((text, index) => (
@@ -471,7 +545,7 @@ export default function PermanentDrawerLeft() {
                   tableHeaderRowClass="heading"
                 />
               )}
-              <div>
+              {/* <div>
                 <a href={GootaGO} download>
                   Download Planilhar Pra Integração
                 </a>
@@ -494,7 +568,9 @@ export default function PermanentDrawerLeft() {
                     Download File
                   </Button>
                 </a>
-              </div>
+              <button onClick={addOrEdit}>:Teste FireBase</button>
+              <button onClick={handleaddOrEdit}>Teste Edit</button>
+              </div> */}
             </div>
           </>
         )}
@@ -502,3 +578,4 @@ export default function PermanentDrawerLeft() {
     </div>
   );
 }
+// https://pt.wix.com/crieseusite6/pt-logo-maker?utm_source=google&utm_medium=cpc&utm_campaign=yt_ads_br_logo_df_pt^top-web-serv&experiment_id=youtube.com^creative1^%2Finternet%20%26%20telecom%2Fweb%20services^&gclid=EAIaIQobChMIwJiZtsTe6QIVcy25Bh31sQ-oEAEYASAAEgL_RfD_BwE
