@@ -203,10 +203,11 @@ export default function PermanentDrawerLeft() {
       order_pickup_date,
       arrayPackage: array,
     });
-    saveInt();
+    // saveInt();
   };
 
   const saveInt = () => {
+    console.log("---->", json);
     api.post("create_delivery_order/", json).then((res) => {
       console.log("res", res);
     });
@@ -550,6 +551,7 @@ export default function PermanentDrawerLeft() {
                 {/* <button className="btn">Upload</button> */}
               </ReactFileReader>
             </div>
+            <button onClick={saveInt}>OK</button>
             <div className="col-12 d-flex justify-content-center mt-2">
               {excel.rows && (
                 <OutTable
@@ -589,7 +591,7 @@ export default function PermanentDrawerLeft() {
           <div>
             <div className={classes.toolbar} />
             <div className="col-12">
-              Para Acesso a Planilhar Pra Integração
+              Para Acessar a Planilhar Pra Integração
               <a
                 href="https://onedrive.live.com/view.aspx?resid=1D82275F9FC36221!170614&ithint=file%2cxlsx&authkey=!AKJKb9C_g83q950"
                 target="_blank"
