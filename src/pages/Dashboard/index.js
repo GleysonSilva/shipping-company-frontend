@@ -34,6 +34,13 @@ import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import api from "../../services/api";
 import TableChart from "@material-ui/icons/TableChart";
 import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
+import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 const drawerWidth = 240;
 
@@ -264,6 +271,11 @@ export default function PermanentDrawerLeft() {
       });
   };
 
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+
+  const rows = [];
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -273,6 +285,7 @@ export default function PermanentDrawerLeft() {
             {view == 0 && "Gerar Novo Pedido"}
             {view == 1 && "Integração"}
             {view == 2 && "Excel"}
+            {view == 3 && "Lista"}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -303,17 +316,20 @@ export default function PermanentDrawerLeft() {
         </div>
         <Divider />
         <List>
-          {["Gerar Pedidos", "Integração", "Excel"].map((text, index) => (
-            <ListItem button key={text} onClick={() => setview(index)}>
-              <ListItemIcon>
-                {index == 0 && <MailIcon />}
-                {index == 1 && <InboxIcon />}
-                {index == 2 && <TableChart />}
-                {/* {index % 2 === 0 ? <MailIcon /> : <InboxIcon />} */}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {["Gerar Pedidos", "Integração", "Excel", "Lista"].map(
+            (text, index) => (
+              <ListItem button key={text} onClick={() => setview(index)}>
+                <ListItemIcon>
+                  {index == 0 && <MailIcon />}
+                  {index == 1 && <InboxIcon />}
+                  {index == 2 && <TableChart />}
+                  {index == 3 && <FormatListNumberedIcon />}
+                  {/* {index % 2 === 0 ? <MailIcon /> : <InboxIcon />} */}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            )
+          )}
         </List>
       </Drawer>
       <span style={{ color: "red" }}>tttt</span>
@@ -652,6 +668,38 @@ export default function PermanentDrawerLeft() {
                 ></iframe>
               </div>
             </div>
+          </div>
+        )}
+
+        {view === 3 && (
+          <div>
+            <div className={classes.toolbar} />
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Data</TableCell>
+                    <TableCell align="right">Numero Nota</TableCell>
+                    <TableCell align="right">Codigo Rastreio</TableCell>
+                    <TableCell align="right">Imprimir Nf-e</TableCell>
+                    <TableCell align="right">Imprimir Cte</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">{row.calories}</TableCell>
+                      <TableCell align="right">{row.fat}</TableCell>
+                      <TableCell align="right">{row.carbs}</TableCell>
+                      <TableCell align="right">{row.protein}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         )}
       </main>
