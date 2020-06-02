@@ -145,23 +145,24 @@ export default function PermanentDrawerLeft() {
     });
   };
   const handleFormJson = (params) => {
+    console.log("teste", params);
     let origin = {
-      complement: params[3][3],
-      locality: params[3][5],
-      neighborhood: params[3][4],
-      number: params[3][1],
       street: params[3][0],
-      uf: params[3][6],
-      zip_code: params[3][7],
+      number: params[3][1],
+      complement: params[3][2],
+      locality: params[3][4],
+      neighborhood: params[3][3],
+      uf: params[3][5],
+      zip_code: params[3][6],
     };
     let destiny = {
-      complement: params[7][3],
-      locality: params[7][5],
-      neighborhood: params[7][4],
-      number: params[7][1],
       street: params[7][0],
-      uf: params[7][6],
-      zip_code: params[7][7],
+      number: params[7][1],
+      complement: params[7][2],
+      locality: params[7][4],
+      neighborhood: params[7][3],
+      uf: params[7][5],
+      zip_code: params[7][6],
     };
 
     let order_pickup_date = `${String(params[10][0]).substr(0, 2)}/${String(
@@ -175,7 +176,7 @@ export default function PermanentDrawerLeft() {
     params.forEach((element, index) => {
       if (index >= 17 && params.length - 1) {
         array.push({
-          products: element[0],
+          products: [element[0]],
           height: element[1],
           width: element[2],
           length: element[3],
@@ -186,24 +187,14 @@ export default function PermanentDrawerLeft() {
       }
     });
 
-    console.log([
-      {
-        origin,
-        destiny,
-        delivery_date,
-        order_pickup_date,
-        arrayPackage: array,
-      },
-    ]);
-
     setjson({
+      user: 1,
       origin,
       destiny,
       delivery_date,
       order_pickup_date,
       arrayPackage: array,
     });
-    // saveInt();
   };
 
   const saveInt = () => {
