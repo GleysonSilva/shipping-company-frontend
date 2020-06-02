@@ -203,6 +203,13 @@ export default function PermanentDrawerLeft() {
       order_pickup_date,
       arrayPackage: array,
     });
+    saveInt();
+  };
+
+  const saveInt = () => {
+    api.post("create_delivery_order/", json).then((res) => {
+      console.log("res", res);
+    });
   };
 
   // const [json, setJson] = useState(initialState)
