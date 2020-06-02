@@ -31,6 +31,8 @@ import { Link } from "react-router-dom";
 import firebaseDb from "../../firebase";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
+import api from "../../services/api";
+import TableChart from "@material-ui/icons/TableChart";
 
 const drawerWidth = 240;
 
@@ -82,6 +84,7 @@ export default function PermanentDrawerLeft() {
     cepOrig: "",
     excel: "",
   });
+
   const [excel, setexcel] = React.useState({ cols: "", rows: "" });
   const [arrayPackage, setarrayPackage] = React.useState([]);
   const [json, setjson] = React.useState([
@@ -122,7 +125,6 @@ export default function PermanentDrawerLeft() {
   ]);
 
   const handleFiles = (files) => {
-    console.log(files);
     fileHandler(files);
   };
 
@@ -143,42 +145,35 @@ export default function PermanentDrawerLeft() {
     });
   };
   const handleFormJson = (params) => {
-    console.log("p", params);
     let origin = {
-      complement: params[2][3],
-      locality: params[2][5],
-      neighborhood: params[2][4],
-      number: params[2][1],
-      street: params[2][0],
-      uf: params[2][6],
-      zip_code: params[2][7],
+      complement: params[3][3],
+      locality: params[3][5],
+      neighborhood: params[3][4],
+      number: params[3][1],
+      street: params[3][0],
+      uf: params[3][6],
+      zip_code: params[3][7],
     };
     let destiny = {
-      complement: params[6][3],
-      locality: params[6][5],
-      neighborhood: params[6][4],
-      number: params[6][1],
-      street: params[6][0],
-      uf: params[6][6],
-      zip_code: params[6][7],
+      complement: params[7][3],
+      locality: params[7][5],
+      neighborhood: params[7][4],
+      number: params[7][1],
+      street: params[7][0],
+      uf: params[7][6],
+      zip_code: params[7][7],
     };
-    console.log(
-      "params",
-      `${String(params[9][0]).substr(0, 2)}/${String(params[9][0]).substr(
-        -6,
-        2
-      )}/${String(params[9][0]).substr(-4)}`
-    );
-    let order_pickup_date = `${String(params[9][0]).substr(0, 2)}/${String(
-      params[9][0]
-    ).substr(-6, 2)}/${String(params[9][0]).substr(-4)}`;
-    let delivery_date = `${String(params[12][0]).substr(0, 2)}/${String(
-      params[12][0]
-    ).substr(-6, 2)}/${String(params[12][0]).substr(-4)}`;
+
+    let order_pickup_date = `${String(params[10][0]).substr(0, 2)}/${String(
+      params[10][0]
+    ).substr(-6, 2)}/${String(params[10][0]).substr(-4)} 00:00`;
+    let delivery_date = `${String(params[13][0]).substr(0, 2)}/${String(
+      params[13][0]
+    ).substr(-6, 2)}/${String(params[13][0]).substr(-4)} 00:00`;
 
     var array = [];
     params.forEach((element, index) => {
-      if (index >= 16 && params.length - 1) {
+      if (index >= 17 && params.length - 1) {
         array.push({
           products: element[0],
           height: element[1],
@@ -200,31 +195,40 @@ export default function PermanentDrawerLeft() {
         arrayPackage: array,
       },
     ]);
+
+    setjson({
+      origin,
+      destiny,
+      delivery_date,
+      order_pickup_date,
+      arrayPackage: array,
+    });
   };
+
+  // const [json, setJson] = useState(initialState)
 
   const addOrEdit = () => {
     let formData = {
       fullname: "Gleyson Silva",
       emnail: "gleeysonEmilio@",
     };
-    console.log(firebaseDb.child("contacts"));
 
-    firebaseDb.child("contacts").push(formData, (err) => {
-      if (err) {
-        console.log("err", err);
-      }
-    });
+    // firebaseDb.child("contacts").push(formData, (err) => {
+    //   if (err) {
+    //     console.log("err", err);
+    //   }
+    // });
   };
   React.useEffect(() => {
     firebaseDb.child("contacts").on("value", (snapshot) => {
       if (snapshot.val() != null) {
-        console.log("snap", snapshot.val());
+        // console.log("snap", snapshot.val());
       }
     });
   }, []);
 
   const handleaddOrEdit = () => {
-    // firebaseDb.child("contacts/-M8fcv96Acux0AczReDo").get(console.log());
+    // firebaseDb.child("contacts/-M8fcv106Acux0AczReDo").get(console.log());
     firebaseDb
       .collection("contacts")
       .where("emnail", "==", "gleeysonEmilioo")
@@ -247,7 +251,9 @@ export default function PermanentDrawerLeft() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            {view === 0 ? "Gerar Novo Pedido" : "Integração"}
+            {view == 0 && "Gerar Novo Pedido"}
+            {view == 1 && "Integração"}
+            {view == 2 && "Excel"}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -278,10 +284,13 @@ export default function PermanentDrawerLeft() {
         </div>
         <Divider />
         <List>
-          {["Gerar Pedidos", "Integração"].map((text, index) => (
+          {["Gerar Pedidos", "Integração", "Excel"].map((text, index) => (
             <ListItem button key={text} onClick={() => setview(index)}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index == 0 && <MailIcon />}
+                {index == 1 && <InboxIcon />}
+                {index == 2 && <TableChart />}
+                {/* {index % 2 === 0 ? <MailIcon /> : <InboxIcon />} */}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -404,7 +413,6 @@ export default function PermanentDrawerLeft() {
               </Typography>
               <ViaCep cep={state.cepDest} lazy>
                 {({ data, loading, error, fetch }) => {
-                  console.log("data", data);
                   if (loading) {
                     return <p>loading...</p>;
                   }
@@ -518,7 +526,6 @@ export default function PermanentDrawerLeft() {
         {view === 1 && (
           <>
             <div className={classes.toolbar} />
-
             <div className={"col-12 d-flex justify-content-center p-5"}>
               <ReactFileReader handleFiles={handleFiles} fileTypes={".xlsx"}>
                 <Button
@@ -553,26 +560,58 @@ export default function PermanentDrawerLeft() {
                 <Link to="./logo.png" target="_blank" download>
                   Download
                 </Link>
-                <Link to={Logo} target="_blank" download>
-                  Download
-                </Link>
-
+                
                 <a
-                  href="./logo.png"
-                  target="_blank"
+                href="./logo.png"
+                target="_blank"
                   rel="noopener noreferrer"
                   download
-                >
+                  >
                   <Button>
                     <i className="fas fa-download" />
                     Download File
-                  </Button>
-                </a>
-              <button onClick={addOrEdit}>:Teste FireBase</button>
-              <button onClick={handleaddOrEdit}>Teste Edit</button>
-              </div> */}
+                    </Button>
+                    </a>
+                    <button onClick={addOrEdit}>:Teste FireBase</button>
+                  </div> */}
+              {/* <button onClick={addOrEdit}>Teste Edit</button> */}
             </div>
           </>
+        )}
+        {view === 2 && (
+          <div>
+            <div className={classes.toolbar} />
+            <div className="col-12">
+              Para Acesso a Planilhar Pra Integração
+              <a
+                href="https://onedrive.live.com/view.aspx?resid=1D82275F9FC36221!170614&ithint=file%2cxlsx&authkey=!AKJKb9C_g83q950"
+                target="_blank"
+              >
+                {" "}
+                Click Aqui!
+              </a>
+            </div>
+            <div className="col-12 justify-content-center">
+              <div className="col-12 mt-3">
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  className={classes.textTitulo}
+                >
+                  Exemplo de Preechimento
+                </Typography>
+              </div>
+              <div className="col-12">
+                <iframe
+                  width="1000"
+                  height="800"
+                  frameborder="0"
+                  scrolling="no"
+                  src="https://onedrive.live.com/embed?resid=1D82275F9FC36221%21170614&authkey=%21AHy0vNcYLmgRtIw&em=2&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&waccluster=BR2"
+                ></iframe>
+              </div>
+            </div>
+          </div>
         )}
       </main>
     </div>
