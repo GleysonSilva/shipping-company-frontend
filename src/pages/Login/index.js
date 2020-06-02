@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "baseline",
     color: "#bdbdbd",
   },
+  textLogin2: {
+    fontWeight: "700",
+    alignItems: "baseline",
+    color: "#bdbdbd",
+  },
   rot: { webkitTransform: "rotate(-90deg)" },
 }));
 
@@ -46,7 +51,7 @@ export default function Login({ history }) {
     <div className={`col-12 img ${classes.root}`}>
       <div className="col-3 justify-content-center login-modal">
         <Paper elevation={3} className="mt-5">
-          <div className="col-12 p-5 ">
+          <div className="col-12">
             <div>
               <div
                 className={`col-12 d-flex justify-content-center ${classes.textLogin}`}
@@ -54,7 +59,11 @@ export default function Login({ history }) {
                 <Typography
                   variant="h6"
                   gutterBottom
-                  className={classes.textLogin}
+                  className={
+                    window.innerWidth < 1400
+                      ? ` ${classes.textLogin2}`
+                      : ` ${classes.textLogin}`
+                  }
                 >
                   GOOTA GO FAST
                 </Typography>
