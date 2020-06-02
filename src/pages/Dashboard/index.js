@@ -33,6 +33,7 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import api from "../../services/api";
 import TableChart from "@material-ui/icons/TableChart";
+import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
 
 const drawerWidth = 240;
 
@@ -198,10 +199,29 @@ export default function PermanentDrawerLeft() {
   };
 
   const saveInt = () => {
-    console.log("---->", json);
-    api.post("create_delivery_order/", json).then((res) => {
-      console.log("res", res);
-    });
+    api
+      .post("/create_delivery_order/", json)
+      .then((res) => {
+        console.log("res", res);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+    //   const headers = {
+    //     "Content-Type": "application/json",
+    //     Authorization: "JWT fefege...",
+    //   };
+
+    //   api
+    //     .post("create_delivery_order/", json, {
+    //       headers: headers,
+    //     })
+    //     .then((res) => {
+    //       console.log("res", res);
+    //     })
+    //     .catch((error) => {
+    //       console.log("error", error);
+    //     });
   };
 
   // const [json, setJson] = useState(initialState)
@@ -525,32 +545,53 @@ export default function PermanentDrawerLeft() {
         {view === 1 && (
           <>
             <div className={classes.toolbar} />
-            <div className={"col-12 d-flex justify-content-center p-5"}>
-              <ReactFileReader handleFiles={handleFiles} fileTypes={".xlsx"}>
+            {!excel.rows && (
+              <div className={"col-12 d-flex justify-content-center p-5"}>
+                <ReactFileReader handleFiles={handleFiles} fileTypes={".xlsx"}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className={classes.button}
+                    startIcon={<CloudUploadIcon />}
+                    style={{
+                      background: "#5c145c",
+                    }}
+                  >
+                    Carregar Arquivo
+                  </Button>
+                  {/* <button className="btn">Upload</button> */}
+                </ReactFileReader>
+              </div>
+            )}
+
+            {excel.rows && (
+              <div className="col-12 d-flex justify-content-center mt-2">
                 <Button
                   variant="contained"
                   color="primary"
                   size="small"
                   className={classes.button}
-                  startIcon={<CloudUploadIcon />}
+                  startIcon={<DynamicFeedIcon />}
                   style={{
                     background: "#5c145c",
                   }}
+                  onClick={saveInt}
                 >
-                  Carregar Arquivo
+                  Integrar Ao Sistema{" "}
                 </Button>
-                {/* <button className="btn">Upload</button> */}
-              </ReactFileReader>
-            </div>
-            <button onClick={saveInt}>OK</button>
+              </div>
+            )}
             <div className="col-12 d-flex justify-content-center mt-2">
               {excel.rows && (
-                <OutTable
-                  data={excel.rows}
-                  columns={excel.cols}
-                  tableClassName="ExcelTable2010"
-                  tableHeaderRowClass="heading"
-                />
+                <>
+                  <OutTable
+                    data={excel.rows}
+                    columns={excel.cols}
+                    tableClassName="ExcelTable2010"
+                    tableHeaderRowClass="heading"
+                  />
+                </>
               )}
               {/* <div>
                 <a href={GootaGO} download>
